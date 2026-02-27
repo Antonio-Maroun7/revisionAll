@@ -1,15 +1,9 @@
 const express = require("express");
 const ClientController = require("../controllers/client.controller");
-const ClientService = require("../services/client.service");
 
 const router = express.Router();
 
-router.post("/giveBonus", ClientController.getBonus);
-router.get("/max-salary", ClientController.getDepartmentMaxMinsalary);
-
-router.get("/clients-with-Max-salary", ClientController.getMaxSalary);
-router.put("/increase-salary/:id", ClientController.increaseSalary);
-router.get("/latestClientInDep", ClientController.getlatest);
+router.get("/test", ClientController.getTest);
 router.get("/with-departments", ClientController.getAllWithDepartments);
 router.get("/", ClientController.getAll);
 router.get("/:id", ClientController.getById);

@@ -47,23 +47,45 @@ class ClientRepository {
 
   static async findAllWithDepartments() {
     const result = await pool.query(`
-           SELECT * FROM clients LEFT JOIN departments 
-           ON clients.dep_id = departments.dep_id 
-           ORDER BY client_id;
+           SELECT * FROM "v_latestClient_Department"
             `);
     return result.rows;
   }
 
   static async findLatestClientInDep() {
     const result = await pool.query(
-      `SELECT 
-        d.department_id,d.department_name,c.client_name,MAX(c.client_id) as latest
-        FROM  department d
-        left join clients c on c.department_id = d.department_id
-        GROUP BY  d.department_id,d.department_name,c.client_name
-        ORDER BY latest desc`,
+      `select * from public."v_latestClient_Department"`,
     );
     return result.rows;
+  }
+
+  static async increaseSalary(id, amount) {
+    const result = await pool.query("call increase_salary($1,$2)", [
+      id,
+      amount,
+    ]);
+    return console.log("Salary increased for client ID:", id);
+  }
+
+  static async ClientWithMaxSalary() {
+    const result = await pool.query(`
+      SELECT * FROM public."v_maxSalary"
+      `);
+    return result.rows[0];
+  }
+
+  static async FindDepartmentWithMaxMInSalary() {
+    const result = await pool.query(`SELECT *FROM public."v_Max-Min"`);
+    return result.rows[0];
+  }
+  static async giveBonusToClientsInDepartment(departmentName, bonusAmount) {
+    const result = await pool.query(
+      `
+      call give_bonus($1, $2)`,
+      [departmentName, bonusAmount],
+    );
+    return console.log(`Bonus of ${bonusAmount} 
+        given to clients in department: ${departmentName}`);
   }
 }
 

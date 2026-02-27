@@ -64,6 +64,55 @@ class ClientController {
       res.status(500).json({ error: e.message });
     }
   }
+
+  static async getTest(req, res) {
+    try {
+      res.status(200).json("hello tets");
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+  static async increaseSalary(req, res) {
+    try {
+      const { id } = req.params;
+      const { amount } = req.body;
+      const result = await ClientService.increaseClientSalary(id, amount);
+      res.status(200).json({ message: "Salary increased successfully" });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+
+  static async getMaxSalary(req, res) {
+    try {
+      const result = await ClientService.getMaxClientSalary();
+      res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+
+  static async getDepartmentMaxMinsalary(req, res) {
+    try {
+      const result = await ClientService.getDepartmentsWithMaxMinSalary();
+      res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+
+  static async getBonus(req, res) {
+    try {
+      const { departmentName, bonusAmount } = req.body;
+      const result = await ClientService.giveBonusToDepartmentClients(
+        departmentName,
+        bonusAmount,
+      );
+      res.status(200).json({ message: "Bonus given successfully" });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
 }
 
 module.exports = ClientController;

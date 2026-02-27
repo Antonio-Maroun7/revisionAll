@@ -68,6 +68,35 @@ class ClientService {
         : null,
     }));
   }
+  static async increaseClientSalary(id, amount) {
+    if (!id || !amount) {
+      throw new Error("ID and amount are required");
+    }
+    return ClientRepository.increaseSalary(id, amount);
+  }
+
+  static async getMaxClientSalary() {
+    const client = await ClientRepository.ClientWithMaxSalary();
+
+    return client;
+  }
+  static async getDepartmentsWithMaxMinSalary() {
+    const salary = await ClientRepository.FindDepartmentWithMaxMInSalary();
+    if (!salary || salary.length === 0) {
+      throw new Error("No data found");
+    }
+    return salary;
+  }
+
+  static async giveBonusToDepartmentClients(departmentName, bonusAmount) {
+    if (!departmentName || !bonusAmount) {
+      throw new Error("Department name and bonus amount are required");
+    }
+    return ClientRepository.giveBonusToClientsInDepartment(
+      departmentName,
+      bonusAmount,
+    );
+  }
 }
 
 module.exports = ClientService;
